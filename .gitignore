@@ -1,0 +1,48 @@
+# ============================================================
+# Spring Boot .gitignore
+# ============================================================
+
+# Compiled class files
+*.class
+target/
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Eclipse
+.classpath
+.project
+.settings/
+.factorypath
+*.launch
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+logs/
+
+# ============================================================
+# CRITICAL — Never commit these
+# ============================================================
+
+# Application properties with secrets
+src/main/resources/application.properties
+src/main/resources/application-prod.properties
+
+# Environment files
+.env
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db

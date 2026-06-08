@@ -1,0 +1,14 @@
+# ============================================================
+# OrderFlux — Configuration Template
+# Copy this to application-local.properties and fill in values
+# ============================================================
+
+# Database
+spring.datasource.password=YOUR_MYSQL_PASSWORD
+
+# Email (Gmail App Password)
+spring.mail.username=contactorderflux@gmail.com
+spring.mail.password=dhxnsannejisnbwm
+
+# JWT Secret (min 32 chars, base64 encoded)
+jwt.secret=YOUR_JWT_SECRET_HERE
