@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+
+  # ── MySQL ──────────────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: orderflux-mysql
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: orderflux_db
+      MYSQL_USER: ${MYSQL_USER:-orderflux}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-orderflux123}
+
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    networks:
+      - orderflux-network
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping",
+             "-h", "localhost",
+             "-u", "root",
+             "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ── Spring Boot App ────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: orderflux-app
+    restart: unless-stopped
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    environment:
+      # Database
+      # "mysql" = service name above = container hostname
+      DB_URL: jdbc:mysql://mysql:3306/orderflux_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: ${MYSQL_USER:-orderflux}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-orderflux123}
+
+      # JPA
+      JPA_DDL_AUTO: update
+      JPA_SHOW_SQL: "false"
+
+      # JWT
+      JWT_SECRET: ${JWT_SECRET:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      JWT_EXPIRATION: 86400000
+
+      # Mail
+      MAIL_HOST: smtp.gmail.com
+      MAIL_PORT: 587
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+
+      # OTP
+      OTP_EXPIRY_MINUTES: 5
+
+      # Logging — less verbose in production
+      LOG_LEVEL_SECURITY: WARN
+      LOG_LEVEL_APP: INFO
+
+    ports:
+      - "8080:8080"
+
+    networks:
+      - orderflux-network
+
+# ── Volumes ────────────────────────────────────────────────
+volumes:
+  mysql_data:
+    driver: local
+
+# ── Networks ───────────────────────────────────────────────
+networks:
+  orderflux-network:
+    driver: bridge

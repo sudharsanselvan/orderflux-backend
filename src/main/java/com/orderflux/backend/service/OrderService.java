@@ -20,6 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.orderflux.backend.service.EmailService;
+import com.orderflux.backend.service.EmailService.OrderItemInfo;
+import java.util.stream.Collectors;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

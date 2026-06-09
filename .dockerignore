@@ -1,0 +1,12 @@
+# Don't copy these into Docker build context
+target/
+*.log
+.git/
+.gitignore
+.env
+*.md
+.idea/
+.classpath
+.project
+.settings/
+src/main/resources/application-local.properties
