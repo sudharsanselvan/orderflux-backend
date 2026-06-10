@@ -86,4 +86,4 @@ mvn spring-boot:run -Dspring-boot.run.profiles=local
 
 ## API Documentation
 
-After startup, visit: {http://localhost:8080/api/swagger-ui/index.html#/(http://localhost:8080/api/swagger-ui/index.html#/)}
+After startup, visit: http://localhost:8080/api/swagger-ui/index.html#/
