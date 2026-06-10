@@ -1,4 +1,3 @@
-# Don't copy these into Docker build context
 target/
 *.log
 .git/
